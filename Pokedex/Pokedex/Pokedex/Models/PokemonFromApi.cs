@@ -17,16 +17,6 @@ namespace Pokedex.Models
         public object Previous { get; set; }
 
         [JsonProperty("results")]
-        public Result[] Results { get; set; }
+        public Pokemon[] Results { get; set; }
     }
-
-    public partial class Result
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("url")]
-        public Uri Url { get; set; }
-    }
-
 }

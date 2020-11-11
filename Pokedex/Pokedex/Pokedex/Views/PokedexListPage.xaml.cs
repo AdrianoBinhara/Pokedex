@@ -1,8 +1,11 @@
-﻿using Pokedex.ViewModels;
+﻿using Newtonsoft.Json;
+using Pokedex.Models;
+using Pokedex.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +30,8 @@ namespace Pokedex.Views
             var response = await client.GetAsync(Url);
             if (response.IsSuccessStatusCode)
             {
-
+                var result = await response.Content.ReadAsStringAsync();
+                var json =  JsonConvert.DeserializeObject<PokemonFromApi>(result);
             }
 
             base.OnAppearing();
