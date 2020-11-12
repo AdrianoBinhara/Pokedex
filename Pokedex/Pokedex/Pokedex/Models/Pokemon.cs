@@ -13,5 +13,12 @@ namespace Pokedex.Models
 
         [JsonProperty("url")]
         public Uri Url { get; set; }
+        [JsonProperty("urlimages")]
+        public Sprites UrlImages { get; set; }
+
+        [JsonProperty("Image")]
+        public string Image { get; set; }
+
+
     }
 }
