@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Pokedex.Models;
+using Pokedex.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Dynamic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +17,24 @@ namespace Pokedex.ViewModels
     public class PokedexListViewModel : BaseViewModel
     {
         #region Private 
-        private bool _isVisible {get;set;}
+        private bool _isLoading { get; set; }
+        private bool _isVisible { get; set; }
         private string _image { get; set; }
         private string _name { get; set; }
-        private List<Pokemon> _listPoke { get; set; }
+        private List<Pokemon> _listPoke;
         #endregion
 
         #region Properties
-        public bool IsVisible 
+        HttpClient client = new HttpClient();
+        public PokemonFromApi json;
+        readonly List<Pokemon> ListPokemon = new List<Pokemon>();
+        public Pokemon SelectPoke { get; set; }
+        public INavigation navigation;
+        public string Next;
+        public string Previous;
+        public string Url = "https://pokeapi.co/api/v2/pokemon";
+
+        public bool IsVisible
         {
             get { return _isVisible; }
             set
@@ -33,16 +46,13 @@ namespace Pokedex.ViewModels
                 }
             }
         }
-        public List<Pokemon> listPoke 
+        public List<Pokemon> listPoke
         {
             get { return _listPoke; }
             set
             {
-                if (_listPoke != value)
-                {
-                    _listPoke = value;
-                    OnPropertyChanged();    
-                }
+                SetProperty(ref _listPoke, value);
+                OnPropertyChanged("ListPokemon");
             }
         }
         public string Image
@@ -57,7 +67,7 @@ namespace Pokedex.ViewModels
                 }
             }
         }
-        public string Name 
+        public string Name
         {
             get { return _name; }
             set
@@ -69,74 +79,100 @@ namespace Pokedex.ViewModels
                 }
             }
         }
-        public string Next;
-        public string Previous;
-        public string Url = "https://pokeapi.co/api/v2/pokemon";
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+       
         #endregion
         #region Commands
-        public ICommand NextCommand { get; }
-        public ICommand PreviousCommand { get; }
+        public Command NextCommand { get; }
+        public Command PreviousCommand { get; }
+        public Command SelectedPokemon { get; }
+
         #endregion
-        public PokedexListViewModel()
+        public PokedexListViewModel(INavigation _navigation)
         {
-                _ = GetPokemon(Url);
+            navigation = _navigation;
+            IsLoading = true;
+           _= GetPokemonList(Url);
+           // GetPokemonByType(Url);
             NextCommand = new Command(async () => await OnNextCommand());
-            PreviousCommand = new Command(async () => await OnPreviousCommand());
+            SelectedPokemon = new Command(async () => await OnSelectedPokemon());
+        }
+
+        private async Task GetPokemonList(string url)
+        {
+            IsLoading = true;
+            await GetPokemon(url);
+            AddToList();
+            IsLoading = false;
+        }
+
+        private async Task GetPokemonByType(string url)
+        {
+           await GetPokemon(url + "?offset=0limit=1050");
+        }
+
+        private async Task OnSelectedPokemon( )
+        {
+            await navigation.PushAsync(new PokemonDetail(SelectPoke));
         }
         #region Methods
         public async Task<bool> GetPokemon(string url)
         {
-            HttpClient client = new HttpClient();
+           
             var response = await client.GetAsync(url);
-
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                var json = JsonConvert.DeserializeObject<PokemonFromApi>(result);
-
+                json = JsonConvert.DeserializeObject<PokemonFromApi>(result);
                 Next = json.Next;
-                Previous = json.Previous;
-                if (string.IsNullOrEmpty(Previous))
-                {
-                    IsVisible = false;
-                }
-                else
-                {
-                    IsVisible = true;
-                }
-
-                List<Pokemon> ListPokemon = new List<Pokemon>();
-                foreach (var item in json.Results)
-                {
-                    Pokemon poke = new Pokemon();
-                    poke.Name = item.Name;
-                    poke.Url = item.Url;
-                    var r = await client.GetAsync(item.Url);
-                    if (r.IsSuccessStatusCode)
-                    {
-                        var resultPoke = await r.Content.ReadAsStringAsync();
-                        var jsonPoke = JsonConvert.DeserializeObject<PokemonFromApi>(resultPoke);
-
-                        poke.Image = jsonPoke.Sprites.FrontDefault.AbsoluteUri.ToString();
-                    }
-                    ListPokemon.Add(poke);
-                }
-                listPoke = ListPokemon;
-                foreach (var i in listPoke)
-                {
-                    Image = i.Image;
-                    Name = i.Name;
-                }
             }
+            
             return true;
         }
-        private async Task OnPreviousCommand()
+
+        private async void AddToList()
         {
-            await GetPokemon(Previous);
+            foreach (var item in json.Results)
+            {
+
+                var poke = new Pokemon();
+                poke.Name = item.Name;
+                poke.Url = item.Url;
+                var r = await client.GetAsync(item.Url);
+                if (r.IsSuccessStatusCode)
+                {
+                    var resultPoke = await r.Content.ReadAsStringAsync();
+                    var jsonPoke = JsonConvert.DeserializeObject<PokemonFromApi>(resultPoke);
+
+                    poke.Image = jsonPoke.Sprites.FrontDefault.AbsoluteUri.ToString();
+                }
+                ListPokemon.Add(poke);
+            }
+
+            //Utilizei apenas para recarregar a lista, mas pode ser melhorado
+            listPoke = null;
+            listPoke = ListPokemon;
+            foreach (var i in listPoke)
+            {
+                Image = i.Image;
+                Name = i.Name;
+            }
         }
+
         private async Task OnNextCommand()
         {
-            await GetPokemon(Next);
+            await GetPokemonList(Next);
         }
         #endregion
     }
