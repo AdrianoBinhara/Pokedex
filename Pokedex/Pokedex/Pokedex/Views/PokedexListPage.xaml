@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Pokedex.Views.PokedexListPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <CollectionView x:Name="listPoke">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame>
+                                <StackLayout HorizontalOptions="Center">
+
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="200"
+                                        Source="{Binding Image}"
+                                        WidthRequest="250" />
+                                    <Label Text="{Binding Name}" />
+                                </StackLayout>
+                            </Frame>
+
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <StackLayout Orientation="Horizontal">
+                <Button
+                    x:Name="btnPrevious"
+                    Clicked="Button_Clicked"
+                    HorizontalOptions="FillAndExpand"
+                    Text="Previous" />
+                <Button
+                    x:Name="btnNext"
+                    Grid.Column="1"
+                    Clicked="Button_Clicked_1"
+                    HorizontalOptions="FillAndExpand"
+                    Text="Next" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
