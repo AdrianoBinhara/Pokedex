@@ -66,7 +66,7 @@ namespace Pokedex.Views
                     if (r.IsSuccessStatusCode)
                     {
                         var resultPoke = await r.Content.ReadAsStringAsync();
-                        var jsonPoke = JsonConvert.DeserializeObject<PokemonStatsFromApi>(resultPoke);
+                        var jsonPoke = JsonConvert.DeserializeObject<PokemonFromApi>(resultPoke);
 
                         poke.Image = jsonPoke.Sprites.FrontDefault.AbsoluteUri.ToString();
                     }

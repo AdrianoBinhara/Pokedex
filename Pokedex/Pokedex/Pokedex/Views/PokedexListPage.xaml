@@ -26,17 +26,19 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button
-                x:Name="btnPrevious"
-                Clicked="Button_Clicked"
-                HorizontalOptions="FillAndExpand"
-                Text="Previous" />
-            <Button
-                x:Name="btnNext"
-                Grid.Column="1"
-                Clicked="Button_Clicked_1"
-                HorizontalOptions="FillAndExpand"
-                Text="Next" />
+            <StackLayout Orientation="Horizontal">
+                <Button
+                    x:Name="btnPrevious"
+                    Clicked="Button_Clicked"
+                    HorizontalOptions="FillAndExpand"
+                    Text="Previous" />
+                <Button
+                    x:Name="btnNext"
+                    Grid.Column="1"
+                    Clicked="Button_Clicked_1"
+                    HorizontalOptions="FillAndExpand"
+                    Text="Next" />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

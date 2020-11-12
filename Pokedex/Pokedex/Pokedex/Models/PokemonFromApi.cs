@@ -21,5 +21,6 @@ namespace Pokedex.Models
 
         [JsonProperty("sprites")]
         public Sprites Sprites { get; set; }
+
     }
 }
