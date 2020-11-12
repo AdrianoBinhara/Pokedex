@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <CollectionView x:Name="listPoke">
+            <CollectionView ItemsSource="{Binding listPoke}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout>
@@ -28,14 +28,13 @@
 
             <StackLayout Orientation="Horizontal">
                 <Button
-                    x:Name="btnPrevious"
-                    Clicked="Button_Clicked"
+                    Command="{Binding PreviousCommand}"
                     HorizontalOptions="FillAndExpand"
+                    IsVisible="{Binding IsVisible}"
                     Text="Previous" />
                 <Button
-                    x:Name="btnNext"
                     Grid.Column="1"
-                    Clicked="Button_Clicked_1"
+                    Command="{Binding NextCommand}"
                     HorizontalOptions="FillAndExpand"
                     Text="Next" />
             </StackLayout>
