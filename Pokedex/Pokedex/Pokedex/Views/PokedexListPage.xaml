@@ -2,31 +2,112 @@
 <ContentPage
     x:Class="Pokedex.Views.PokedexListPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
 
-        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid>
+            <ScrollView>
+                <StackLayout
+                    BackgroundColor="White"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand">
+                    <Label
+                        Margin="40,10"
+                        FontAttributes="Bold"
+                        FontSize="28"
+                        Text="Pokedex"
+                        TextColor="#394F68"
+                        VerticalOptions="Start" />
+                    <Frame
+                        Margin="40,10"
+                        Padding="0"
+                        BackgroundColor="Transparent"
+                        BorderColor="#AEAEAE"
+                        CornerRadius="52"
+                        HorizontalOptions="Fill"
+                        IsClippedToBounds="True"
+                        Opacity=".6"
+                        VerticalOptions="StartAndExpand">
+                        <SearchBar
+                            Placeholder="Pesquise o nome do Pokemon"
+                            PlaceholderColor="#394F68"
+                            TextChanged="SearchBar_TextChanged"
+                            TextColor="#394F68" />
+                    </Frame>
+                    <ScrollView
+                        Margin="40,0"
+                        HorizontalOptions="Start"
+                        Orientation="Horizontal">
+                        <Button
+                            BackgroundColor="#394F68"
+                            CornerRadius="30"
+                            HeightRequest="40"
+                            Text="Todos"
+                            TextColor="White"
+                            TextTransform="None"
+                            WidthRequest="70" />
+                    </ScrollView>
+                    <CollectionView
+                        x:Name="PokemonCollectionView"
+                        Margin="40,10,40,0"
+                        BackgroundColor="Transparent"
+                        ItemsSource="{Binding listPoke}"
+                        SelectedItem="{Binding SelectPoke}"
+                        SelectionChangedCommand="{Binding SelectedPokemon}"
+                        SelectionMode="Single">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout
+                                HorizontalItemSpacing="10"
+                                Orientation="Vertical"
+                                Span="2"
+                                VerticalItemSpacing="20" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame
+                                    Padding="0"
+                                    BackgroundColor="#F9A555"
+                                    CornerRadius="11"
+                                    IsClippedToBounds="True">
+                                    <StackLayout
+                                        BackgroundColor="#F9A555"
+                                        HorizontalOptions="Fill"
+                                        Spacing="0"
+                                        VerticalOptions="Fill">
+                                        <Image
+                                            Aspect="AspectFit"
+                                            HeightRequest="100"
+                                            Source="{Binding Image}"
+                                            WidthRequest="100" />
+                                        <Label
+                                            Margin="20,0,20,010"
+                                            FontAttributes="Bold"
+                                            FontSize="14"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding Name}"
+                                            TextColor="#394F68" />
+                                    </StackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-            <CollectionView
-                x:Name="PokemonCollectionView"
-                ItemsSource="{Binding listPoke}"
-                SelectedItem="{Binding SelectPoke}"
-                SelectionChangedCommand="{Binding SelectedPokemon}"
-                SelectionMode="Single">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout BackgroundColor="White" HorizontalOptions="Center">
-                            <Image
-                                Aspect="AspectFit"
-                                HeightRequest="150"
-                                Source="{Binding Image}"
-                                WidthRequest="200" />
-                            <Label Text="{Binding Name}" />
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
 
+
+                    <Button
+                        Margin="40,0,40,10"
+                        BackgroundColor="#394F68"
+                        Command="{Binding NextCommand}"
+                        CornerRadius="500"
+                        HorizontalOptions="FillAndExpand"
+                        Opacity=".9"
+                        Text="Carregar Mais"
+                        TextColor="White"
+                        VerticalOptions="EndAndExpand" />
+
+                </StackLayout>
+            </ScrollView>
             <Frame
                 x:Name="PokemonFrame"
                 BackgroundColor="Black"
@@ -41,22 +122,6 @@
                     IsVisible="{Binding IsLoading}"
                     Color="Yellow" />
             </Frame>
-            <Frame
-                Margin="10,10,10,0"
-                Padding="0"
-                CornerRadius="5"
-                HorizontalOptions="Fill"
-                IsClippedToBounds="True"
-                Opacity=".6"
-                VerticalOptions="StartAndExpand">
-                <SearchBar BackgroundColor="#aeaeae" TextChanged="SearchBar_TextChanged" SearchCommand="{Binding }"/>
-            </Frame>
-
-            <Button
-                Command="{Binding NextCommand}"
-                HorizontalOptions="FillAndExpand"
-                Text="Carregar Mais"
-                VerticalOptions="EndAndExpand" />
 
         </Grid>
     </ContentPage.Content>
