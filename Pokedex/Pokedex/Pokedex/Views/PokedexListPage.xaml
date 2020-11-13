@@ -48,22 +48,12 @@
                             TextTransform="None"
                             WidthRequest="70" />
                     </ScrollView>
-                    <CollectionView
+                    <CarouselView
                         x:Name="PokemonCollectionView"
                         Margin="40,10,40,0"
                         BackgroundColor="Transparent"
                         ItemsSource="{Binding listPoke}"
-                        SelectedItem="{Binding SelectPoke}"
-                        SelectionChangedCommand="{Binding SelectedPokemon}"
-                        SelectionMode="Single">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout
-                                HorizontalItemSpacing="10"
-                                Orientation="Vertical"
-                                Span="2"
-                                VerticalItemSpacing="20" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
+                        
                             <DataTemplate>
                                 <Frame
                                     Padding="0"
@@ -81,7 +71,7 @@
                                             Source="{Binding Image}"
                                             WidthRequest="100" />
                                         <Label
-                                            Margin="20,0,20,010"
+                                            Margin="20,0,20,10"
                                             FontAttributes="Bold"
                                             FontSize="14"
                                             HorizontalOptions="Start"
@@ -91,7 +81,7 @@
                                 </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
-                    </CollectionView>
+                    </CarouselView>
 
 
 
