@@ -4,6 +4,17 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="btFilter" TargetType="Button">
+                <Setter Property="CornerRadius" Value="30" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="TextTransform" Value="None" />
+                <Setter Property="WidthRequest" Value="40" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
 
         <Grid>
@@ -34,19 +45,27 @@
                         TextChanged="SearchBar_TextChanged"
                         TextColor="#394F68" />
                 </Frame>
-                <ScrollView
-                    Margin="40,0"
-                    HorizontalOptions="Start"
-                    Orientation="Horizontal">
+
+                <StackLayout Margin="5,0,0,0" Orientation="Horizontal">
                     <Button
                         BackgroundColor="#394F68"
-                        CornerRadius="30"
-                        HeightRequest="40"
+                        Style="{x:StaticResource btFilter}"
                         Text="Todos"
-                        TextColor="White"
-                        TextTransform="None"
                         WidthRequest="70" />
-                </ScrollView>
+                    <CollectionView HeightRequest="40" ItemsSource="{Binding ListButton}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="15" Orientation="Horizontal" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    BackgroundColor="{Binding BackgroundColor}"
+                                    Style="{x:StaticResource btFilter}"
+                                    Text="Todos" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
                 <CollectionView
                     x:Name="PokemonCollectionView"
                     Margin="0,10,0,0"
