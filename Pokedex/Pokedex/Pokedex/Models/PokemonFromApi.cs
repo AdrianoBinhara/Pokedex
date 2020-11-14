@@ -21,6 +21,11 @@ namespace Pokedex.Models
 
         [JsonProperty("sprites")]
         public Sprites Sprites { get; set; }
+        [JsonProperty("stats")]
+        public Stat[] Stats { get; set; }
+
+        [JsonProperty("types")]
+        public TypeElement[] Types { get; set; }
 
     }
 }
