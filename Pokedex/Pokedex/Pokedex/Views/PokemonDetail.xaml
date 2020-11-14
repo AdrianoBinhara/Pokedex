@@ -2,15 +2,48 @@
 <ContentPage
     x:Class="Pokedex.Views.PokemonDetail"
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <Image
-                Aspect="AspectFit"
-                HeightRequest="150"
-                Source="{Binding Pokemon.Image}"
-                WidthRequest="200" />
-            <Label Text="{Binding Pokemon.Name}" />
-        </StackLayout>
+        <Grid RowDefinitions="*,1.4*">
+            <pancake:PancakeView
+                BackgroundColor="{Binding Pokemon.BackGroundcolor}"
+                CornerRadius="0,0,40,40"
+                Opacity=".6" />
+            <StackLayout Spacing="0">
+                <Image
+                    Aspect="AspectFit"
+                    HeightRequest="150"
+                    Source="{Binding Pokemon.Image}"
+                    WidthRequest="200" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="26"
+                    HorizontalOptions="Center"
+                    Text="{Binding Pokemon.Name}"
+                    TextColor="#394F68" />
+            </StackLayout>
+            <StackLayout
+                Grid.Row="1"
+                Padding="20"
+                VerticalOptions="FillAndExpand">
+                <Label
+                    FontSize="22"
+                    Text="Atributos"
+                    TextColor="#394F68" />
+                <StackLayout BindableLayout.ItemsSource="{Binding ListStats}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding BaseStat}" />
+                                <Label Text="{Binding StatStat.Name}" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+
+                </StackLayout>
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
