@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Pokedex.Mocks;
 using Pokedex.Models;
 using Pokedex.Views;
 using System;
@@ -33,6 +34,7 @@ namespace Pokedex.ViewModels
         public string Previous;
         public string Url = "https://pokeapi.co/api/v2/pokemon";
 
+        public ObservableCollection<FilterButton> ListButton { get; set; }
         public ObservableCollection<Pokemon> ListPokemon
         {
             get { return _ListPokemon; }
@@ -109,11 +111,15 @@ namespace Pokedex.ViewModels
             navigation = _navigation;
             IsLoading = true;
            _= GetPokemonList(Url);
-           // GetPokemonByType(Url);
+            // GetPokemonByType(Url);
+            MockFilterButton mockbt = new MockFilterButton();
+            ListButton = mockbt.Get();
             NextCommand = new Command(async () => await OnNextCommand());
             SelectedPokemon = new Command(async () => await OnSelectedPokemon());
         }
 
+
+        #region Methods
         private async Task GetPokemonList(string url)
         {
             await GetPokemon(url);
@@ -126,14 +132,13 @@ namespace Pokedex.ViewModels
 
         private async Task GetPokemonByType(string url)
         {
-           await GetPokemon(url + "?offset=0limit=1050");
+            await GetPokemon(url + "?offset=0limit=1050");
         }
 
-        private async Task OnSelectedPokemon( )
+        private async Task OnSelectedPokemon()
         {
             await navigation.PushAsync(new PokemonDetail(SelectPoke));
         }
-        #region Methods
         public async Task<bool> GetPokemon(string url)
         {
             IsLoading = true;

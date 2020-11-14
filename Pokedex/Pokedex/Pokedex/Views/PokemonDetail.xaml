@@ -10,7 +10,7 @@
             <pancake:PancakeView
                 BackgroundColor="{Binding Pokemon.BackGroundcolor}"
                 CornerRadius="0,0,40,40"
-                Opacity=".6" />
+                Opacity=".3" />
             <StackLayout Spacing="0">
                 <Image
                     Aspect="AspectFit"
@@ -35,10 +35,32 @@
                 <StackLayout BindableLayout.ItemsSource="{Binding ListStats}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding BaseStat}" />
+                            <Grid ColumnDefinitions="2*,4*,*" HorizontalOptions="CenterAndExpand">
                                 <Label Text="{Binding StatStat.Name}" />
-                            </StackLayout>
+                                <BoxView
+                                    Grid.Column="1"
+                                    CornerRadius="10"
+                                    HeightRequest="5"
+                                    HorizontalOptions="FillAndExpand"
+                                    Opacity="0.3"
+                                    VerticalOptions="Center"
+                                    WidthRequest="100"
+                                    Color="Gray" />
+                                <BoxView
+                                    Grid.Column="1"
+                                    CornerRadius="10"
+                                    HeightRequest="5"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center"
+                                    WidthRequest="{Binding BaseStat}"
+                                    Color="Green" />
+
+                                <Label
+                                    Grid.Column="2"
+                                    Text="{Binding BaseStat}"
+                                    VerticalTextAlignment="Center" />
+
+                            </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
 
