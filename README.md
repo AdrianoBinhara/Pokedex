@@ -1,4 +1,4 @@
-# Pokedex
+# Pokedex - Xamarin.Forms
 ### App made for a challeng to Elysios, and for practicing API consumption. Layout available [here](https://www.figma.com/proto/SoXl6s6HcYxpwG5S8XOa0D/Pokedex?node-id=4%3A2&scaling=scale-down)
 In this app was used the https://pokeapi.co/ API to get all pokemons and information about the pokemon world.
 
