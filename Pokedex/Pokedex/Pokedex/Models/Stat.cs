@@ -8,13 +8,14 @@ namespace Pokedex.Models
     public partial class Stat
     {
         [JsonProperty("base_stat")]
-        public long BaseStat { get; set; }
+        public float BaseStat { get; set; }
 
         [JsonProperty("effort")]
         public long Effort { get; set; }
 
         [JsonProperty("stat")]
         public Species StatStat { get; set; }
+        public long LoadStat { get; set; }
     }
 
     public class Species
@@ -22,4 +23,7 @@ namespace Pokedex.Models
         [JsonProperty("name")]
         public string Name { get; set; }
     }
+
 }
+
+

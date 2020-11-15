@@ -22,15 +22,41 @@
                 BackgroundColor="White"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand">
+
                 <Label
-                    Margin="40,10"
+                    Margin="20,10,20,0"
                     FontAttributes="Bold"
                     FontSize="28"
                     Text="Pokedex"
                     TextColor="#394F68"
                     VerticalOptions="Start" />
+                <StackLayout
+                    Margin="20,0"
+                    HorizontalOptions="StartAndExpand"
+                    IsVisible="{Binding IsLoading}"
+                    Orientation="Horizontal">
+                    <Label
+                        FontSize="10"
+                        Text="Recebendo Pokemons..."
+                        TextColor="Black"
+                        VerticalTextAlignment="Center" />
+                    <ActivityIndicator
+                        x:Name="PokemonLoad"
+                        Margin="10,0"
+                        HeightRequest="20"
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}"
+                        WidthRequest="20"
+                        Color="Black" />
+
+                </StackLayout>
+                <ProgressBar
+                    HorizontalOptions="FillAndExpand"
+                    IsVisible="{Binding IsLoading}"
+                    Progress="{Binding loadPokemon}"
+                    ProgressColor="Green" />
                 <Frame
-                    Margin="40,10"
+                    Margin="40,0"
                     Padding="0"
                     BackgroundColor="Transparent"
                     BorderColor="#AEAEAE"
@@ -49,28 +75,41 @@
                 <StackLayout Margin="5,0,0,0" Orientation="Horizontal">
                     <Button
                         BackgroundColor="#394F68"
+                        Clicked="Button_Clicked"
                         Style="{x:StaticResource btFilter}"
                         Text="Todos"
                         WidthRequest="70" />
-                    <CollectionView HeightRequest="40" ItemsSource="{Binding ListButton}">
+                    <CollectionView
+                        x:Name="CollectionButton"
+                        HeightRequest="40"
+                        SelectionChanged="PokemonCollectionView_SelectionChanged"
+                        SelectionMode="Single">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="15" Orientation="Horizontal" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Button
-                                    BackgroundColor="{Binding BackgroundColor}"
-                                    Style="{x:StaticResource btFilter}"
-                                    Text="Todos" />
+                                <Grid BackgroundColor="White">
+                                    <Button
+                                        BackgroundColor="{Binding BackgroundColor}"
+                                        ImageSource="{Binding Icon}"
+                                        IsEnabled="False"
+                                        Style="{x:StaticResource btFilter}"
+                                        WidthRequest="46" />
+                                </Grid>
+
+
                             </DataTemplate>
+
                         </CollectionView.ItemTemplate>
+
                     </CollectionView>
                 </StackLayout>
                 <CollectionView
                     x:Name="PokemonCollectionView"
                     Margin="0,10,0,0"
                     BackgroundColor="Transparent"
-                    ItemsSource="{Binding ListPokemon}"
+                    ItemsSource="{Binding FullListPokemon}"
                     SelectedItem="{Binding SelectPoke}"
                     SelectionChangedCommand="{Binding SelectedPokemon}"
                     SelectionMode="Single">
@@ -113,35 +152,8 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
-
-
-                <Button
-                    Margin="40,0,40,10"
-                    BackgroundColor="#394F68"
-                    Command="{Binding NextCommand}"
-                    CornerRadius="500"
-                    HorizontalOptions="FillAndExpand"
-                    Opacity=".9"
-                    Text="Carregar Mais"
-                    TextColor="White"
-                    VerticalOptions="EndAndExpand" />
-
             </StackLayout>
-            <Frame
-                x:Name="PokemonFrame"
-                BackgroundColor="Black"
-                CornerRadius="10"
-                HorizontalOptions="Center"
-                IsVisible="{Binding IsLoading}"
-                Opacity=".6"
-                VerticalOptions="Center">
-                <ActivityIndicator
-                    x:Name="PokemonLoad"
-                    IsRunning="{Binding IsLoading}"
-                    IsVisible="{Binding IsLoading}"
-                    Color="Yellow" />
-            </Frame>
+
 
         </Grid>
     </ContentPage.Content>

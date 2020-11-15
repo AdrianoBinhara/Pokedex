@@ -35,7 +35,7 @@
                 <StackLayout BindableLayout.ItemsSource="{Binding ListStats}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="2*,4*,*" HorizontalOptions="CenterAndExpand">
+                            <Grid ColumnDefinitions="*,4*,*" HorizontalOptions="CenterAndExpand">
                                 <Label Text="{Binding StatStat.Name}" />
                                 <BoxView
                                     Grid.Column="1"

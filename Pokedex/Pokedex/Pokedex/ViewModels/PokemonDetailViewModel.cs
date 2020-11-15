@@ -30,7 +30,7 @@ namespace Pokedex.ViewModels
         }
 
         private void GetStats()
-        {
+        { 
             foreach (var st in Pokemon.Stats)
             {
                 ListStats.Add(st);
