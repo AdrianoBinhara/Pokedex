@@ -8,7 +8,7 @@
     <ContentPage.Content>
         <Grid RowDefinitions="*,1.4*">
             <pancake:PancakeView
-                BackgroundColor="{Binding Pokemon.BackGroundcolor}"
+                BackgroundColor="{Binding Pokemon.BackgroundColor}"
                 CornerRadius="0,0,40,40"
                 Opacity=".3" />
             <StackLayout Spacing="0">
@@ -25,10 +25,10 @@
                     TextColor="#394F68" />
                 <Label
                     FontAttributes="Bold"
-                    FontSize="11"
+                    FontSize="13"
                     HorizontalOptions="Center"
                     Opacity=".4"
-                    Text="{Binding Pokemon.Element}"
+                    Text="{Binding Pokemon.ElementType}"
                     TextColor="Black"
                     TextTransform="Uppercase" />
             </StackLayout>

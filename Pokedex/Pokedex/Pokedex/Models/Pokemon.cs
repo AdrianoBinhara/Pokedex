@@ -8,6 +8,8 @@ namespace Pokedex.Models
 {
     public class Pokemon
     {
+        [JsonProperty("Id")]
+        public long Id { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
 

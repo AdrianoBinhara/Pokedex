@@ -1,5 +1,6 @@
 ﻿using Pokedex.Mocks;
 using Pokedex.Models;
+using Pokedex.Models.ModelLTB;
 using Pokedex.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,26 +14,11 @@ namespace Pokedex.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PokedexListPage : ContentPage
     {
-        private ObservableCollection<Pokemon> _filteredListPokemon { get; set; }
-        public FilterButton filterButton { get; set; }
         public PokedexListViewModel pokemonViewModel { get; set; }
-        public ObservableCollection<Pokemon> FilteredList
-        {
-            get { return _filteredListPokemon; }
-            set
-            {
-                if (_filteredListPokemon != value)
-                {
-                    _filteredListPokemon = value;
-                    OnPropertyChanged("FilteredList");
-                }
-            }
-        }
         public PokedexListPage()
         {
             InitializeComponent();
             GetMockButton();
-            FilteredList = new ObservableCollection<Pokemon>();
             pokemonViewModel = new PokedexListViewModel(Navigation);
             BindingContext = pokemonViewModel;
         }
@@ -46,13 +32,13 @@ namespace Pokedex.Views
         private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {  
             if (string.IsNullOrEmpty(e.NewTextValue))
-                PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemon;
+                PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemonLTB;
             
             else
             {
-                PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemon;
-                IEnumerable<Pokemon> enumerable = pokemonViewModel.FullListPokemon.Where(p => p.Name.Contains(e.NewTextValue));
-                var observableFiltered = new ObservableCollection<Pokemon>(enumerable.ToList());
+                PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemonLTB;
+                IEnumerable<PokemonLTB> enumerable = pokemonViewModel.FullListPokemonLTB.Where(p => p.Name.Contains(e.NewTextValue.ToUpper()));
+                var observableFiltered = new ObservableCollection<PokemonLTB>(enumerable.ToList());
                 PokemonCollectionView.ItemsSource= observableFiltered;
             }
         }
@@ -83,17 +69,16 @@ namespace Pokedex.Views
                 "shadow.png" => url = "shadow",
                 _ => url = ""
             };
-            PokemonCollectionView.ItemsSource = null;
-            PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemon;
-            IEnumerable<Pokemon> eumerable = pokemonViewModel.FullListPokemon.Where(p => p.Element.Contains(url));
-            var observableFiltered = new ObservableCollection<Pokemon>(eumerable.ToList());
+            PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemonLTB;
+            IEnumerable<PokemonLTB> eumerable = pokemonViewModel.FullListPokemonLTB.Where(p => p.ElementType.Contains(url));
+            var observableFiltered = new ObservableCollection<PokemonLTB>(eumerable.ToList());
             PokemonCollectionView.ItemsSource= observableFiltered;
         }
 
         private void Button_Clicked(object sender, EventArgs e)
         {
             PokemonCollectionView.ItemsSource = null;
-            PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemon;
+            PokemonCollectionView.ItemsSource = pokemonViewModel.FullListPokemonLTB;
         }
     }
 }
