@@ -1,8 +1,6 @@
 ﻿using Pokedex.Models;
-using System;
-using System.Collections.Generic;
+using Pokedex.Models.ModelLTB;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace Pokedex.ViewModels
 {
@@ -21,8 +19,8 @@ namespace Pokedex.ViewModels
                 }
             }
         }
-        public Pokemon Pokemon { get; set; }
-        public PokemonDetailViewModel(Pokemon pokemon)
+        public PokemonLTB Pokemon { get; set; }
+        public PokemonDetailViewModel(PokemonLTB pokemon)
         {
             Pokemon = pokemon;
             ListStats = new ObservableCollection<Stat>();

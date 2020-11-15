@@ -9,6 +9,10 @@ namespace Pokedex.Models
     {
         [JsonProperty("count")]
         public long Count { get; set; }
+        [JsonProperty("Id")]
+        public long Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
         [JsonProperty("next")]
         public string Next { get; set; }

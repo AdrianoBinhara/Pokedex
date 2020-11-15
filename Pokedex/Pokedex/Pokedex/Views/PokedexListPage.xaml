@@ -109,7 +109,7 @@
                     x:Name="PokemonCollectionView"
                     Margin="0,10,0,0"
                     BackgroundColor="Transparent"
-                    ItemsSource="{Binding FullListPokemon}"
+                    ItemsSource="{Binding FullListPokemonLTB}"
                     SelectedItem="{Binding SelectPoke}"
                     SelectionChangedCommand="{Binding SelectedPokemon}"
                     SelectionMode="Single">
