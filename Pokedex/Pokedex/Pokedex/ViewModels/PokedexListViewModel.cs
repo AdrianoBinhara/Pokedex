@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using LiteDB;
+using Newtonsoft.Json;
+using Pokedex.Helpers;
 using Pokedex.Mocks;
 using Pokedex.Models;
 using Pokedex.Views;
@@ -6,7 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,27 +22,26 @@ namespace Pokedex.ViewModels
     public class PokedexListViewModel : BaseViewModel
     {
         #region Private 
+        private ObservableCollection<Pokemon> _fullListPokemon { get; set; }
+        private string _colorBackgroundPoke { get; set; }
         private float _loadPokemon { get; set; }
         private bool _isLoading { get; set; }
         private string _image { get; set; }
         private string _name { get; set; }
-        
-        private ObservableCollection<Pokemon> _fullListPokemon { get; set; }
         #endregion
 
         #region Properties
-        HttpClient client;
-        private string _colorBackgroundPoke { get; set; }
-        public PokemonFromApi json;
+        LiteDatabase _dataBase;
+        string identificador = "idImagem";
+
         public Pokemon SelectPoke { get; set; }
-        
+        public PokemonFromApi json;
+        public Stream stream;
+        HttpClient client;
         public INavigation navigation;
         public string Next;
         public string Previous;
         public string Url = "https://pokeapi.co/api/v2/pokemon";
-
-       
-
         public ObservableCollection<Pokemon> FullListPokemon
         {
             get { return _fullListPokemon; }
@@ -63,8 +66,8 @@ namespace Pokedex.ViewModels
                 }
             }
         }
-       
-        public string ColorBackgroundPoke 
+
+        public string ColorBackgroundPoke
         {
             get { return _colorBackgroundPoke; }
             set
@@ -112,7 +115,7 @@ namespace Pokedex.ViewModels
                 }
             }
         }
-       
+
         #endregion
         #region Commands
         public Command NextCommand { get; }
@@ -123,19 +126,21 @@ namespace Pokedex.ViewModels
         public PokedexListViewModel(INavigation _navigation)
         {
             FullListPokemon = new ObservableCollection<Pokemon>();
+            _dataBase = new LiteDatabase(DependencyService.Get<IFileHelper>().GetLocalFilePath("MeuBanco.db"));
             client = new HttpClient();
             navigation = _navigation;
-           _= GetPokemonList(Url);
+            _ = GetPokemonList(Url);
+            
             SelectedPokemon = new Command(async () => await OnSelectedPokemon());
         }
+
+       
 
 
         #region Methods
         private async Task GetPokemonList(string url)
         {
             await GetPokemon(url);
-            
-            
         }
 
         private async Task OnSelectedPokemon()
@@ -152,7 +157,7 @@ namespace Pokedex.ViewModels
                 json = JsonConvert.DeserializeObject<PokemonFromApi>(result);
             }
             AddToList();
-            
+
             return true;
         }
 
@@ -180,14 +185,16 @@ namespace Pokedex.ViewModels
                         poke.Element = jsonPoke.Types.ElementAt(0).Type.Name;
                         if (jsonPoke.Stats != null)
                             poke.Stats = jsonPoke.Stats;
+
+                        
                     }
-                    catch (Exception )
+                    catch (Exception)
                     {
-                       await Application.Current.MainPage.DisplayAlert("Concluído", "Você ja pode utilizar sua pokedex completa!", "OK");
+                        await Application.Current.MainPage.DisplayAlert("Concluído", "Você ja pode utilizar sua pokedex completa!", "OK");
                         IsLoading = false;
                         return;
                     }
-                    
+
                     ColorBackgroundPoke = poke.Element switch
                     {
                         "normal" => ColorBackgroundPoke = "#394F68",
@@ -212,16 +219,48 @@ namespace Pokedex.ViewModels
                         _ => ColorBackgroundPoke = "#EBEBEB"
                     };
                     poke.BackGroundcolor = ColorBackgroundPoke;
+
                     float longLoad = (float)FullListPokemon.Count;
                     loadPokemon = longLoad / 982;
                 }
-                    FullListPokemon.Add(poke);
-                
+                FullListPokemon.Add(poke);
+                if (_dataBase.FileStorage.Exists(identificador))
+                {
+                    stream = _dataBase.FileStorage.OpenRead(identificador);
+                    poke.Image = ImageSource.FromStream(() => stream).ToString();
+                }
+                stream = GetImageStreamFromUrl(poke.Image);
+
+                //Se existir a Stream
+                if (stream != null)
+                {
+                    //Verfica se ja existe a imagem,se existir apaga
+                    if (_dataBase.FileStorage.Exists(identificador))
+                    {
+                        _dataBase.FileStorage.Delete(identificador);
+                    }
+                    _dataBase.FileStorage.Upload(identificador, "Teste", stream);
+
+                }
+
             }
             if (FullListPokemon.Count != 1050)
                 await GetPokemonList(json.Next);
             else
-                IsLoading = false;    
+                IsLoading = false;
+        }
+        private Stream GetImageStreamFromUrl(string url)
+        {
+            using (var webClient = new WebClient())
+            {
+                var imageBytes = webClient.DownloadData(url);
+                if (imageBytes != null && imageBytes.Length > 0)
+                {
+                    Stream stream = new MemoryStream(imageBytes);
+                    return stream;
+                }
+            }
+            return null;
         }
         #endregion
     }

@@ -23,6 +23,14 @@
                     HorizontalOptions="Center"
                     Text="{Binding Pokemon.Name}"
                     TextColor="#394F68" />
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="11"
+                    HorizontalOptions="Center"
+                    Opacity=".4"
+                    Text="{Binding Pokemon.Element}"
+                    TextColor="Black"
+                    TextTransform="Uppercase" />
             </StackLayout>
             <StackLayout
                 Grid.Row="1"
