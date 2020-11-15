@@ -13,16 +13,27 @@
                 <Setter Property="TextTransform" Value="None" />
                 <Setter Property="WidthRequest" Value="40" />
             </Style>
+            <Style x:Key="frSearchBar" TargetType="Frame">
+                <Setter Property="Margin" Value="40," />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="BackgroundColer" Value="Trasnparent" />
+                <Setter Property="BorderColor" Value="#AEAEAE" />
+                <Setter Property="CornerRadius" Value="52" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="IsClippedToBounds" Value="True" />
+                <Setter Property="Opacity" Value=".6" />
+                <Setter Property="VerticalOptions" Value="StartAndExpand" />
+            </Style>
+            <Style />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-
         <Grid>
             <StackLayout
                 BackgroundColor="White"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand">
-
+                <!--  Título e barra de pesquisa  -->
                 <Label
                     Margin="20,10,20,0"
                     FontAttributes="Bold"
@@ -30,16 +41,7 @@
                     Text="Pokedex"
                     TextColor="#394F68"
                     VerticalOptions="Start" />
-                <Frame
-                    Margin="40,0"
-                    Padding="0"
-                    BackgroundColor="Transparent"
-                    BorderColor="#AEAEAE"
-                    CornerRadius="52"
-                    HorizontalOptions="Fill"
-                    IsClippedToBounds="True"
-                    Opacity=".6"
-                    VerticalOptions="StartAndExpand">
+                <Frame Style="{x:StaticResource frSearchBar}">
                     <SearchBar
                         Placeholder="Pesquise o nome do Pokemon"
                         PlaceholderColor="#394F68"
@@ -47,6 +49,7 @@
                         TextColor="#394F68" />
                 </Frame>
 
+                <!--  Lista de botões  -->
                 <StackLayout Margin="5,0,0,0" Orientation="Horizontal">
                     <Button
                         BackgroundColor="#394F68"
@@ -76,6 +79,8 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
+
+                <!--  Lista de pokemons  -->
                 <CollectionView
                     x:Name="PokemonCollectionView"
                     Margin="0,10,0,0"
@@ -123,8 +128,9 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </StackLayout>
+
+            <!--  stack de loading  -->
             <StackLayout
                 Margin="20,0"
                 HorizontalOptions="CenterAndExpand"

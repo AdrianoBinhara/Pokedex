@@ -7,6 +7,7 @@
     NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <Grid RowDefinitions="*,1.4*">
+            <!--  Layout superior imagem Pokemon  -->
             <pancake:PancakeView
                 BackgroundColor="{Binding Pokemon.BackgroundColor}"
                 CornerRadius="0,0,40,40"
@@ -32,6 +33,8 @@
                     TextColor="Black"
                     TextTransform="Uppercase" />
             </StackLayout>
+
+            <!--  Layout dos atributos  -->
             <StackLayout
                 Grid.Row="1"
                 Padding="20"
@@ -62,16 +65,13 @@
                                     VerticalOptions="Center"
                                     WidthRequest="{Binding BaseStat}"
                                     Color="Green" />
-
                                 <Label
                                     Grid.Column="2"
                                     Text="{Binding BaseStat}"
                                     VerticalTextAlignment="Center" />
-
                             </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-
                 </StackLayout>
             </StackLayout>
         </Grid>

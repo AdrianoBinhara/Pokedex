@@ -106,6 +106,7 @@ namespace Pokedex.ViewModels
                 {
                     PokeLoad = "Recebendo Pokemons... Isto pode demorar um pouco.";
                     var pokemonsAPI = await _pokemonService.GetPokemonAsync();
+                    PokeLoad = "Salvando pokemons localmente para experiência offline";
                     foreach (var pokemon in pokemonsAPI)
                     {
                         PokemonLTB pokeLTB = new PokemonLTB
