@@ -18,10 +18,12 @@ namespace Pokedex.ViewModels
     public class PokedexListViewModel : BaseViewModel
     {
         #region Private 
+        private float _loadPokemon { get; set; }
         private bool _isLoading { get; set; }
         private string _image { get; set; }
         private string _name { get; set; }
-        private ObservableCollection<Pokemon> _ListPokemon { get; set; }
+        
+        private ObservableCollection<Pokemon> _fullListPokemon { get; set; }
         #endregion
 
         #region Properties
@@ -29,21 +31,35 @@ namespace Pokedex.ViewModels
         private string _colorBackgroundPoke { get; set; }
         public PokemonFromApi json;
         public Pokemon SelectPoke { get; set; }
+        
         public INavigation navigation;
         public string Next;
         public string Previous;
         public string Url = "https://pokeapi.co/api/v2/pokemon";
 
-        public ObservableCollection<FilterButton> ListButton { get; set; }
-        public ObservableCollection<Pokemon> ListPokemon
+       
+
+        public ObservableCollection<Pokemon> FullListPokemon
         {
-            get { return _ListPokemon; }
+            get { return _fullListPokemon; }
             set
             {
-                if (_ListPokemon !=value)
+                if (_fullListPokemon != value)
                 {
-                    _ListPokemon = value;
-                    OnPropertyChanged("ListPokemon");
+                    _fullListPokemon = value;
+                    OnPropertyChanged("FullListPokemon");
+                }
+            }
+        }
+        public float loadPokemon
+        {
+            get { return _loadPokemon; }
+            set
+            {
+                if (_loadPokemon != value)
+                {
+                    _loadPokemon = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -101,20 +117,15 @@ namespace Pokedex.ViewModels
         #region Commands
         public Command NextCommand { get; }
         public Command SelectedPokemon { get; }
+        public Command FilterByElement { get; }
 
         #endregion
         public PokedexListViewModel(INavigation _navigation)
         {
-            ListPokemon = new ObservableCollection<Pokemon>();
-            
+            FullListPokemon = new ObservableCollection<Pokemon>();
             client = new HttpClient();
             navigation = _navigation;
-            IsLoading = true;
            _= GetPokemonList(Url);
-            // GetPokemonByType(Url);
-            MockFilterButton mockbt = new MockFilterButton();
-            ListButton = mockbt.Get();
-            NextCommand = new Command(async () => await OnNextCommand());
             SelectedPokemon = new Command(async () => await OnSelectedPokemon());
         }
 
@@ -123,16 +134,8 @@ namespace Pokedex.ViewModels
         private async Task GetPokemonList(string url)
         {
             await GetPokemon(url);
-            AddToList();
-        }
-        private async Task OnNextCommand()
-        {
-            await GetPokemonList(Next);
-        }
-
-        private async Task GetPokemonByType(string url)
-        {
-            await GetPokemon(url + "?offset=0limit=1050");
+            
+            
         }
 
         private async Task OnSelectedPokemon()
@@ -142,15 +145,14 @@ namespace Pokedex.ViewModels
         public async Task<bool> GetPokemon(string url)
         {
             IsLoading = true;
-
             var response = await client.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
                 json = JsonConvert.DeserializeObject<PokemonFromApi>(result);
-                Next = json.Next;
             }
-            IsLoading = false;
+            AddToList();
+            
             return true;
         }
 
@@ -159,7 +161,6 @@ namespace Pokedex.ViewModels
             IsLoading = true;
             foreach (var item in json.Results)
             {
-
                 var poke = new Pokemon
                 {
                     Name = item.Name,
@@ -171,10 +172,22 @@ namespace Pokedex.ViewModels
                     var resultPoke = await r.Content.ReadAsStringAsync();
                     var jsonPoke = JsonConvert.DeserializeObject<PokemonFromApi>(resultPoke);
 
-                    poke.Image = jsonPoke.Sprites.FrontDefault.AbsoluteUri.ToString();
-                    poke.Element = jsonPoke.Types.ElementAt(0).Type.Name;
-                    poke.Stats = jsonPoke.Stats;
-                   
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(jsonPoke.Sprites.FrontDefault.AbsoluteUri.ToString())) ;
+                        poke.Image = jsonPoke.Sprites.FrontDefault.AbsoluteUri.ToString();
+                        if (!string.IsNullOrEmpty(jsonPoke.Types.ElementAt(0).Type.Name)) ;
+                        poke.Element = jsonPoke.Types.ElementAt(0).Type.Name;
+                        if (jsonPoke.Stats != null)
+                            poke.Stats = jsonPoke.Stats;
+                    }
+                    catch (Exception )
+                    {
+                       await Application.Current.MainPage.DisplayAlert("Concluído", "Você ja pode utilizar sua pokedex completa!", "OK");
+                        IsLoading = false;
+                        return;
+                    }
+                    
                     ColorBackgroundPoke = poke.Element switch
                     {
                         "normal" => ColorBackgroundPoke = "#394F68",
@@ -199,10 +212,16 @@ namespace Pokedex.ViewModels
                         _ => ColorBackgroundPoke = "#EBEBEB"
                     };
                     poke.BackGroundcolor = ColorBackgroundPoke;
+                    float longLoad = (float)FullListPokemon.Count;
+                    loadPokemon = longLoad / 982;
                 }
-                ListPokemon.Add(poke);
+                    FullListPokemon.Add(poke);
+                
             }
-            IsLoading = false;
+            if (FullListPokemon.Count != 1050)
+                await GetPokemonList(json.Next);
+            else
+                IsLoading = false;    
         }
         #endregion
     }
