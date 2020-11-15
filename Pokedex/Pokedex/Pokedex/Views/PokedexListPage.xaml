@@ -30,31 +30,6 @@
                     Text="Pokedex"
                     TextColor="#394F68"
                     VerticalOptions="Start" />
-                <StackLayout
-                    Margin="20,0"
-                    HorizontalOptions="StartAndExpand"
-                    IsVisible="{Binding IsLoading}"
-                    Orientation="Horizontal">
-                    <Label
-                        FontSize="10"
-                        Text="Recebendo Pokemons..."
-                        TextColor="Black"
-                        VerticalTextAlignment="Center" />
-                    <ActivityIndicator
-                        x:Name="PokemonLoad"
-                        Margin="10,0"
-                        HeightRequest="20"
-                        IsRunning="{Binding IsLoading}"
-                        IsVisible="{Binding IsLoading}"
-                        WidthRequest="20"
-                        Color="Black" />
-
-                </StackLayout>
-                <ProgressBar
-                    HorizontalOptions="FillAndExpand"
-                    IsVisible="{Binding IsLoading}"
-                    Progress="{Binding loadPokemon}"
-                    ProgressColor="Green" />
                 <Frame
                     Margin="40,0"
                     Padding="0"
@@ -97,12 +72,8 @@
                                         Style="{x:StaticResource btFilter}"
                                         WidthRequest="46" />
                                 </Grid>
-
-
                             </DataTemplate>
-
                         </CollectionView.ItemTemplate>
-
                     </CollectionView>
                 </StackLayout>
                 <CollectionView
@@ -152,9 +123,28 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
             </StackLayout>
+            <StackLayout
+                Margin="20,0"
+                HorizontalOptions="CenterAndExpand"
+                IsVisible="{Binding IsLoading}"
+                VerticalOptions="CenterAndExpand">
+                <Label
+                    FontSize="15"
+                    HorizontalTextAlignment="Center"
+                    Text="{Binding PokeLoad}"
+                    TextColor="Black"
+                    VerticalTextAlignment="Center" />
+                <ActivityIndicator
+                    Margin="10,0"
+                    HeightRequest="40"
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    WidthRequest="40"
+                    Color="Black" />
 
-
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

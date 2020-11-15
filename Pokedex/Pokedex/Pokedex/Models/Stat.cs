@@ -10,9 +10,6 @@ namespace Pokedex.Models
         [JsonProperty("base_stat")]
         public float BaseStat { get; set; }
 
-        [JsonProperty("effort")]
-        public long Effort { get; set; }
-
         [JsonProperty("stat")]
         public Species StatStat { get; set; }
         public long LoadStat { get; set; }

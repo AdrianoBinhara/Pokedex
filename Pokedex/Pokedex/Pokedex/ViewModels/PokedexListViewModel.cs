@@ -14,6 +14,7 @@ using Pokedex.Services;
 using Xamarin.Essentials;
 using Pokedex.Models.ModelLTB;
 using System.Diagnostics;
+using Xamarin.Forms.Xaml;
 
 namespace Pokedex.ViewModels
 {
@@ -24,6 +25,7 @@ namespace Pokedex.ViewModels
         private ObservableCollection<PokemonLTB> _fullListPokemonLTB { get; set; }
         private string _colorBackgroundPoke { get; set; }
         private bool _isLoading { get; set; }
+        private string _pokeLoad { get; set; }
         #endregion
 
         #region Properties
@@ -31,6 +33,18 @@ namespace Pokedex.ViewModels
         public PokemonLTB SelectPoke { get; set; }
         public INavigation navigation;
 
+        public string PokeLoad
+        {
+            get { return _pokeLoad; }
+            set
+            {
+                if (_pokeLoad != value)
+                {
+                    _pokeLoad = value;
+                    OnPropertyChanged("PokeLoad");
+                }
+            }
+        }
         public ObservableCollection<PokemonLTB> FullListPokemonLTB
         {
             get { return _fullListPokemonLTB; }
@@ -39,7 +53,7 @@ namespace Pokedex.ViewModels
                 if (_fullListPokemonLTB != value)
                 {
                     _fullListPokemonLTB = value;
-                    OnPropertyChanged("FullListPokemon");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -55,7 +69,7 @@ namespace Pokedex.ViewModels
                 }
             }
         }
-        
+
         public bool IsLoading
         {
             get { return _isLoading; }
@@ -69,27 +83,19 @@ namespace Pokedex.ViewModels
             }
         }
         #endregion
-        #region Commands
-        public Command NextCommand { get; }
-        public Command SelectedPokemon { get; }
-        public Command FilterByElement { get; }
 
-        #endregion
+        public Command SelectedPokemon { get; }
         public PokedexListViewModel(INavigation _navigation)
         {
+            navigation = _navigation;
             FullListPokemonLTB = new ObservableCollection<PokemonLTB>();
             _pokemonService = new PokemonsService();
             _dataBase = new LiteDatabase(Path.Combine(FileSystem.AppDataDirectory, "MeuBanco.db"));
-            navigation = _navigation;
             _ = GetPokemon();
             SelectedPokemon = new Command(async () => await OnSelectedPokemon());
         }
 
         #region Methods
-        private async Task OnSelectedPokemon()
-        {
-            await navigation.PushAsync(new PokemonDetail(SelectPoke));
-        }
         public async Task GetPokemon()
         {
             IsLoading = true;
@@ -98,6 +104,7 @@ namespace Pokedex.ViewModels
                 LiteCollection<PokemonLTB> pokemonsDB = (LiteCollection<PokemonLTB>)_dataBase.GetCollection<PokemonLTB>();
                 if (pokemonsDB.Count() == 0)
                 {
+                    PokeLoad = "Recebendo Pokemons... Isto pode demorar um pouco.";
                     var pokemonsAPI = await _pokemonService.GetPokemonAsync();
                     foreach (var pokemon in pokemonsAPI)
                     {
@@ -152,6 +159,7 @@ namespace Pokedex.ViewModels
                 {
                     pokemon.Image = ImageSource.FromStream(() => _dataBase.FileStorage.FindById(pokemon.Id.ToString()).OpenRead());
                     FullListPokemonLTB.Add(pokemon);
+
                 }
             }
             catch (Exception ex)
@@ -175,6 +183,10 @@ namespace Pokedex.ViewModels
                 }
             }
             return null;
+        }
+        private async Task OnSelectedPokemon()
+        {
+            await navigation.PushAsync(new PokemonDetail(SelectPoke));
         }
         #endregion
     }

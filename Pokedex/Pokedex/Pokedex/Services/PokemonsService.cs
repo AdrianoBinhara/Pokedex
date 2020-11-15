@@ -23,7 +23,7 @@ namespace Pokedex.Services
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 string api = "https://pokeapi.co/api/v2/pokemon/";
-                for (int i = 1; i < 20; i++)
+                for (int i = 1; i < 1050; i++)
                 {
                     var response = await httpClient.GetAsync<PokemonFromApi>($"{api}{i}");
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
