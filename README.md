@@ -5,7 +5,7 @@ In this app was used the https://pokeapi.co/ API to get all pokemons and informa
 # Instalation
 Make sure you have the latest Xamarin.Forms installed in your computer. If not, see how you can install it [here](https://docs.microsoft.com/en-us/xamarin/get-started/installation/windows).
 
-Instal an emulator [see how here](https://visualstudio.microsoft.com/pt-br/vs/msft-android-emulator/#:~:text=Basta%20abrir%20a%20entrada%20Emulador,a%20partir%20de%20qualquer%20IDE.), or use a real device.
+Instal an Android emulator [see how here](https://visualstudio.microsoft.com/pt-br/vs/msft-android-emulator/#:~:text=Basta%20abrir%20a%20entrada%20Emulador,a%20partir%20de%20qualquer%20IDE.), or use a real Android device.
 
 ##### Make sure to run the project in C# 8.0 or above.
 
