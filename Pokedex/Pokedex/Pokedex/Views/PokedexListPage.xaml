@@ -63,6 +63,7 @@
                         <CollectionView
                             x:Name="CollectionButton"
                             HeightRequest="40"
+                            HorizontalOptions="FillAndExpand"
                             SelectionChanged="PokemonCollectionView_SelectionChanged"
                             SelectionMode="Single">
                             <CollectionView.ItemsLayout>
