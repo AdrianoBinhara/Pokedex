@@ -24,7 +24,6 @@
                 <Setter Property="Opacity" Value=".6" />
                 <Setter Property="VerticalOptions" Value="StartAndExpand" />
             </Style>
-            <Style />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
