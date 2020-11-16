@@ -22,134 +22,140 @@
                 <Setter Property="HorizontalOptions" Value="Fill" />
                 <Setter Property="IsClippedToBounds" Value="True" />
                 <Setter Property="Opacity" Value=".6" />
-                <Setter Property="VerticalOptions" Value="StartAndExpand" />
+                <Setter Property="VerticalOptions" Value="Start" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid>
-            <StackLayout
-                BackgroundColor="White"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand">
-                <!--  Título e barra de pesquisa  -->
-                <Label
-                    Margin="20,10,20,0"
-                    FontAttributes="Bold"
-                    FontSize="28"
-                    Text="Pokedex"
-                    TextColor="#394F68"
-                    VerticalOptions="Start" />
-                <Frame Style="{x:StaticResource frSearchBar}">
-                    <SearchBar
-                        Placeholder="Pesquise o nome do Pokemon"
-                        PlaceholderColor="#394F68"
-                        TextChanged="SearchBar_TextChanged"
-                        TextColor="#394F68" />
-                </Frame>
+        <ScrollView>
+            <Grid>
+                <StackLayout BackgroundColor="White" HorizontalOptions="FillAndExpand">
+                    <!--  Título e barra de pesquisa  -->
+                    <Label
+                        Margin="20,10,20,0"
+                        FontAttributes="Bold"
+                        FontSize="28"
+                        Text="Pokedex"
+                        TextColor="#394F68"
+                        VerticalOptions="Start" />
+                    <Frame Style="{x:StaticResource frSearchBar}">
+                        <SearchBar
+                            FontAttributes="Italic"
+                            FontSize="14"
+                            Placeholder="Pesquise o nome do Pokemon"
+                            PlaceholderColor="#394F68"
+                            TextChanged="SearchBar_TextChanged"
+                            TextColor="#394F68" />
+                    </Frame>
 
-                <!--  Lista de botões  -->
-                <StackLayout Margin="5,0,0,0" Orientation="Horizontal">
-                    <Button
-                        BackgroundColor="#394F68"
-                        Clicked="Button_Clicked"
-                        Style="{x:StaticResource btFilter}"
-                        Text="Todos"
-                        WidthRequest="70" />
+                    <!--  Lista de botões  -->
+                    <StackLayout
+                        Margin="5,0,0,0"
+                        HorizontalOptions="FillAndExpand"
+                        Orientation="Horizontal"
+                        VerticalOptions="Start">
+                        <Button
+                            BackgroundColor="#394F68"
+                            Clicked="Button_Clicked"
+                            Style="{x:StaticResource btFilter}"
+                            Text="Todos"
+                            WidthRequest="70" />
+                        <CollectionView
+                            x:Name="CollectionButton"
+                            HeightRequest="40"
+                            SelectionChanged="PokemonCollectionView_SelectionChanged"
+                            SelectionMode="Single">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="15" Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid BackgroundColor="White">
+                                        <Button
+                                            BackgroundColor="{Binding BackgroundColor}"
+                                            ImageSource="{Binding Icon}"
+                                            IsEnabled="False"
+                                            Style="{x:StaticResource btFilter}"
+                                            WidthRequest="46" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+                    <!--  Lista de pokemons  -->
                     <CollectionView
-                        x:Name="CollectionButton"
-                        HeightRequest="40"
-                        SelectionChanged="PokemonCollectionView_SelectionChanged"
-                        SelectionMode="Single">
+                        x:Name="PokemonCollectionView"
+                        BackgroundColor="Transparent"
+                        HeightRequest="400"
+                        ItemsSource="{Binding FullListPokemonLTB}"
+                        SelectedItem="{Binding SelectPoke}"
+                        SelectionChangedCommand="{Binding SelectedPokemon}"
+                        SelectionMode="Single"
+                        VerticalOptions="StartAndExpand">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="15" Orientation="Horizontal" />
+                            <GridItemsLayout
+                                HorizontalItemSpacing="10"
+                                Orientation="Horizontal"
+                                Span="2"
+                                VerticalItemSpacing="0" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid BackgroundColor="White">
-                                    <Button
-                                        BackgroundColor="{Binding BackgroundColor}"
-                                        ImageSource="{Binding Icon}"
-                                        IsEnabled="False"
-                                        Style="{x:StaticResource btFilter}"
-                                        WidthRequest="46" />
+                                    <Frame
+                                        Padding="0"
+                                        BackgroundColor="White"
+                                        CornerRadius="11"
+                                        IsClippedToBounds="True"
+                                        VerticalOptions="Start">
+                                        <StackLayout
+                                            BackgroundColor="Transparent"
+                                            HorizontalOptions="Fill"
+                                            Spacing="0"
+                                            VerticalOptions="Start">
+                                            <Image
+                                                Aspect="AspectFit"
+                                                HeightRequest="100"
+                                                Source="{Binding Image}"
+                                                WidthRequest="100" />
+                                            <Label
+                                                Margin="20,0,20,10"
+                                                FontAttributes="Bold"
+                                                FontSize="14"
+                                                HorizontalOptions="Start"
+                                                Text="{Binding Name}"
+                                                TextColor="#394F68" />
+                                        </StackLayout>
+                                    </Frame>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
 
-                <!--  Lista de pokemons  -->
-                <CollectionView
-                    x:Name="PokemonCollectionView"
-                    Margin="0,10,0,0"
-                    BackgroundColor="Transparent"
-                    ItemsSource="{Binding FullListPokemonLTB}"
-                    SelectedItem="{Binding SelectPoke}"
-                    SelectionChangedCommand="{Binding SelectedPokemon}"
-                    SelectionMode="Single">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout
-                            HorizontalItemSpacing="10"
-                            Orientation="Horizontal"
-                            Span="2"
-                            VerticalItemSpacing="0" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid BackgroundColor="White">
-                                <Frame
-                                    Padding="0"
-                                    BackgroundColor="White"
-                                    CornerRadius="11"
-                                    IsClippedToBounds="True"
-                                    VerticalOptions="Start">
-                                    <StackLayout
-                                        BackgroundColor="Transparent"
-                                        HorizontalOptions="Fill"
-                                        Spacing="0"
-                                        VerticalOptions="Start">
-                                        <Image
-                                            Aspect="AspectFit"
-                                            HeightRequest="100"
-                                            Source="{Binding Image}"
-                                            WidthRequest="100" />
-                                        <Label
-                                            Margin="20,0,20,10"
-                                            FontAttributes="Bold"
-                                            FontSize="14"
-                                            HorizontalOptions="Start"
-                                            Text="{Binding Name}"
-                                            TextColor="#394F68" />
-                                    </StackLayout>
-                                </Frame>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-
-            <!--  stack de loading  -->
-            <StackLayout
-                Margin="20,0"
-                HorizontalOptions="CenterAndExpand"
-                IsVisible="{Binding IsLoading}"
-                VerticalOptions="CenterAndExpand">
-                <Label
-                    FontSize="15"
-                    HorizontalTextAlignment="Center"
-                    Text="{Binding PokeLoad}"
-                    TextColor="Black"
-                    VerticalTextAlignment="Center" />
-                <ActivityIndicator
-                    Margin="10,0"
-                    HeightRequest="40"
-                    IsRunning="{Binding IsLoading}"
+                <!--  stack de loading  -->
+                <StackLayout
+                    Margin="20,0"
+                    HorizontalOptions="CenterAndExpand"
                     IsVisible="{Binding IsLoading}"
-                    WidthRequest="40"
-                    Color="Black" />
+                    VerticalOptions="CenterAndExpand">
+                    <Label
+                        FontSize="15"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding PokeLoad}"
+                        TextColor="Black"
+                        VerticalTextAlignment="Center" />
+                    <ActivityIndicator
+                        Margin="10,0"
+                        HeightRequest="40"
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}"
+                        WidthRequest="40"
+                        Color="Black" />
 
-            </StackLayout>
-        </Grid>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
