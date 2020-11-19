@@ -12,7 +12,6 @@ namespace Pokedex.Models
 
         [JsonProperty("stat")]
         public Species StatStat { get; set; }
-        public long LoadStat { get; set; }
     }
 
     public class Species

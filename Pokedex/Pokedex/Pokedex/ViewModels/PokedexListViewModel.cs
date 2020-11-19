@@ -30,21 +30,7 @@ namespace Pokedex.ViewModels
 
         #region Properties
         LiteDatabase _dataBase;
-        public PokemonLTB SelectPoke { get; set; }
         public INavigation navigation;
-
-        public string PokeLoad
-        {
-            get { return _pokeLoad; }
-            set
-            {
-                if (_pokeLoad != value)
-                {
-                    _pokeLoad = value;
-                    OnPropertyChanged("PokeLoad");
-                }
-            }
-        }
         public ObservableCollection<PokemonLTB> FullListPokemonLTB
         {
             get { return _fullListPokemonLTB; }
@@ -54,6 +40,18 @@ namespace Pokedex.ViewModels
                 {
                     _fullListPokemonLTB = value;
                     OnPropertyChanged();
+                }
+            }
+        }
+        public string PokeLoad
+        {
+            get { return _pokeLoad; }
+            set
+            {
+                if (_pokeLoad != value)
+                {
+                    _pokeLoad = value;
+                    OnPropertyChanged("PokeLoad");
                 }
             }
         }
@@ -83,7 +81,7 @@ namespace Pokedex.ViewModels
             }
         }
         #endregion
-
+        public PokemonLTB SelectPoke { get; set; }
         public Command SelectedPokemon { get; }
         public PokedexListViewModel(INavigation _navigation)
         {

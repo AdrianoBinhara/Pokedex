@@ -33,7 +33,6 @@ namespace Pokedex.ViewModels
             {
                 ListStats.Add(st);
             }
-
         }
     }
 }
